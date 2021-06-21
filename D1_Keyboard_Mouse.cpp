@@ -24,14 +24,14 @@ void init(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
 	in_depth = 1;
 	glMatrixMode(GL_MODELVIEW);
 	glPointSize(9.0);
-	glLineWidth(6.0f);
+	glLineWidth(1.0f);
 }
 
 void tampil(void)
@@ -43,14 +43,19 @@ void tampil(void)
 	else {
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
+	
 	glLoadIdentity();
 	// mengatur sudut pandang mata ataukamera
+	
 	gluLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	
+
 	glRotatef(xrot, 0.0f, 1.0f, 0.0f);
 	glRotatef(yrot, 1.0f, 0.0f, 0.0f);
 	glTranslatef(0.0f, 0.0f, ztran);
 	glTranslatef(0.0f, ytran, ztran);
 	glTranslatef(xtran, 0.0f, 0.0f);
+
 	glPushMatrix();
 
 	// membuat object depan
@@ -108,6 +113,10 @@ void tampil(void)
 	glEnd();
 
 	glPopMatrix();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glutWireSphere(5, 15, 15);
+
 	glutSwapBuffers();
 	glFlush();
 }
@@ -118,8 +127,22 @@ void keyboard(unsigned char key, int x, int y)
 	{
 	case 'w':
 	case 'W':
-		cout << "W" << endl;
-		ztran += 3.0f;
+		if (xrot > -45 && xrot <= 45) {
+			ztran += 3.0f;
+			cout << "S -ZTRAN" << endl;
+		}
+		if (xrot > 45 && xrot <= 135) {
+			xtran -= 3.0f;
+			cout << "S +XTRAN" << endl;
+		}
+		if (xrot > 135 && xrot <= 225) {
+			ztran -= 3.0f;
+			cout << "S -ZTRAN" << endl;
+		}
+		if (xrot > 225 && xrot <= 315) {
+			xtran += 3.0f;
+			cout << "S +XTRAN" << endl;
+		}
 		break;
 	case 'a':
 	case 'A':
@@ -140,6 +163,25 @@ void keyboard(unsigned char key, int x, int y)
 			cout << "D -ZTRAN" << endl;
 		}
 		break;
+	case 's':
+	case 'S':
+		if (xrot > -45 && xrot <= 45) {
+			ztran -= 3.0f;
+			cout << "S -ZTRAN" << endl;
+		}
+		if (xrot > 45 && xrot <= 135) {
+			xtran += 3.0f;
+			cout << "S +XTRAN" << endl;
+		}
+		if (xrot > 135 && xrot <= 225) {
+			ztran += 3.0f;
+			cout << "S -ZTRAN" << endl;
+		}
+		if (xrot > 225 && xrot <= 315) {
+			xtran -= 3.0f;
+			cout << "S +XTRAN" << endl;
+		}
+		break;
 	case 'd':
 	case 'D':
 		if (xrot > -45 && xrot <= 45) {
@@ -158,38 +200,6 @@ void keyboard(unsigned char key, int x, int y)
 			ztran += 3.0f;
 			cout << "D +ZTRAN" << endl;
 		}
-		break;
-	case 's':
-	case 'S':
-		cout << "S" << endl;
-		ztran -= 3.0f;
-		break;
-
-
-
-	case '7':
-		glTranslatef(0.0, 3.0, 0.0);
-		break;
-	case '9':
-		glTranslatef(0.0, -3.0, 0.0);
-		break;
-	case '2':
-		glRotatef(2.0, 1.0, 0.0, 0.0);
-		break;
-	case '8':
-		glRotatef(-2.0, 1.0, 0.0, 0.0);
-		break;
-	case '6':
-		glRotatef(2.0, 0.0, 1.0, 0.0);
-		break;
-	case '4':
-		glRotatef(-2.0, 0.0, 1.0, 0.0);
-		break;
-	case '1':
-		glRotatef(2.0, 0.0, 0.0, 1.0);
-		break;
-	case '3':
-		glRotatef(-2.0, 0.0, 0.0, 1.0);
 		break;
 	case '5':
 		if (in_depth)
