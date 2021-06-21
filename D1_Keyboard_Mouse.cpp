@@ -15,6 +15,7 @@ float yrot = 0.0f;
 float xdiff = 0.0f;
 float ydiff = 0.0f;
 float ztran = 0.0f;
+float ytran = 0.0f;
 float xtran = 0.0f;
 bool mouseDown = false;
 int in_depth;
@@ -48,6 +49,7 @@ void tampil(void)
 	glRotatef(xrot, 0.0f, 1.0f, 0.0f);
 	glRotatef(yrot, 1.0f, 0.0f, 0.0f);
 	glTranslatef(0.0f, 0.0f, ztran);
+	glTranslatef(0.0f, ytran, ztran);
 	glTranslatef(xtran, 0.0f, 0.0f);
 	glPushMatrix();
 
@@ -119,21 +121,52 @@ void keyboard(unsigned char key, int x, int y)
 		cout << "W" << endl;
 		ztran += 3.0f;
 		break;
+	case 'a':
+	case 'A':
+		if (xrot > -45 && xrot <= 45) {
+			xtran += 3.0f;
+			cout << "D +XTRAN" << endl;
+		}
+		if (xrot > 45 && xrot <= 135) {
+			ztran += 3.0f;
+			cout << "D +ZTRAN" << endl;
+		}
+		if (xrot > 135 && xrot <= 225) {
+			xtran -= 3.0f;
+			cout << "D -XTRAN" << endl;
+		}
+		if (xrot > 225 && xrot <= 315) {
+			ztran -= 3.0f;
+			cout << "D -ZTRAN" << endl;
+		}
+		break;
 	case 'd':
 	case 'D':
-		cout << "D" << endl;
-		xtran -= 3.0f;
+		if (xrot > -45 && xrot <= 45) {
+			xtran -= 3.0f;
+			cout << "D -XTRAN" << endl;
+		}
+		if (xrot > 45 && xrot <= 135) {
+			ztran -= 3.0f;
+			cout << "D -ZTRAN" << endl;
+		}
+		if (xrot > 135 && xrot <= 225) {
+			xtran += 3.0f;
+			cout << "D +XTRAN" << endl;
+		}
+		if (xrot > 225 && xrot <= 315) {
+			ztran += 3.0f;
+			cout << "D +ZTRAN" << endl;
+		}
 		break;
 	case 's':
 	case 'S':
 		cout << "S" << endl;
 		ztran -= 3.0f;
 		break;
-	case 'a':
-	case 'A':
-		cout << "A" << endl;
-		xtran += 3.0f;
-		break;
+
+
+
 	case '7':
 		glTranslatef(0.0, 3.0, 0.0);
 		break;
@@ -193,7 +226,11 @@ void mouseMotion(int x, int y)
 	{
 		xrot = x - xdiff;
 		yrot = y + ydiff;
+		if (xrot > 315) {
+			xrot = xrot - 360;
+		}
 		cout << "X = "<< xrot << "  Y = " << yrot << endl;
+		
 		glutPostRedisplay();
 	}
 }
