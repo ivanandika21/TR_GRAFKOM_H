@@ -45,20 +45,29 @@ void tampil(void)
 	}
 
 	glLoadIdentity();
-	// mengatur sudut pandang mata ataukamera
-
+	// mengatur sudut pandang mata atau kamera
 	gluLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 	glRotatef(xrot, 0.0f, 1.0f, 0.0f);
 	glRotatef(yrot, 1.0f, 0.0f, 0.0f);
 	glTranslatef(0.0f, 0.0f, ztran);
-	glTranslatef(0.0f, ytran, ztran);
+	glTranslatef(0.0f, ytran, 0.0f);
 	glTranslatef(xtran, 0.0f, 0.0f);
 
 	glPushMatrix();
 
+	//ground
+	glBegin(GL_QUADS);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3i(-700, 0, 600);
+	glVertex3i(700, 0, 600);
+	glVertex3i(700, 0, -600);
+	glVertex3i(-700, 0, -600);
+	glEnd();
+
 	// membuat object depan
 	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 1.0f);
 	glVertex3i(-240, 100, 80);
 	glVertex3i(-200, 0, 60);
 	glVertex3i(240, 40, 60);
@@ -169,78 +178,86 @@ void keyboard(unsigned char key, int x, int y)
 	case 'w':
 	case 'W':
 		if (xrot > -45 && xrot <= 45) {
-			ztran += 3.0f;
+			ztran += 5.0f;
 			cout << "S -ZTRAN" << endl;
 		}
 		if (xrot > 45 && xrot <= 135) {
-			xtran -= 3.0f;
+			xtran -= 5.0f;
 			cout << "S +XTRAN" << endl;
 		}
 		if (xrot > 135 && xrot <= 225) {
-			ztran -= 3.0f;
+			ztran -= 5.0f;
 			cout << "S -ZTRAN" << endl;
 		}
 		if (xrot > 225 && xrot <= 315) {
-			xtran += 3.0f;
+			xtran += 5.0f;
 			cout << "S +XTRAN" << endl;
 		}
 		break;
 	case 'a':
 	case 'A':
 		if (xrot > -45 && xrot <= 45) {
-			xtran += 3.0f;
+			xtran += 5.0f;
 			cout << "D +XTRAN" << endl;
 		}
 		if (xrot > 45 && xrot <= 135) {
-			ztran += 3.0f;
+			ztran += 5.0f;
 			cout << "D +ZTRAN" << endl;
 		}
 		if (xrot > 135 && xrot <= 225) {
-			xtran -= 3.0f;
+			xtran -= 5.0f;
 			cout << "D -XTRAN" << endl;
 		}
 		if (xrot > 225 && xrot <= 315) {
-			ztran -= 3.0f;
+			ztran -= 5.0f;
 			cout << "D -ZTRAN" << endl;
 		}
 		break;
 	case 's':
 	case 'S':
 		if (xrot > -45 && xrot <= 45) {
-			ztran -= 3.0f;
+			ztran -= 5.0f;
 			cout << "S -ZTRAN" << endl;
 		}
 		if (xrot > 45 && xrot <= 135) {
-			xtran += 3.0f;
+			xtran += 5.0f;
 			cout << "S +XTRAN" << endl;
 		}
 		if (xrot > 135 && xrot <= 225) {
-			ztran += 3.0f;
+			ztran += 5.0f;
 			cout << "S -ZTRAN" << endl;
 		}
 		if (xrot > 225 && xrot <= 315) {
-			xtran -= 3.0f;
+			xtran -= 5.0f;
 			cout << "S +XTRAN" << endl;
 		}
 		break;
 	case 'd':
 	case 'D':
 		if (xrot > -45 && xrot <= 45) {
-			xtran -= 3.0f;
+			xtran -= 5.0f;
 			cout << "D -XTRAN" << endl;
 		}
 		if (xrot > 45 && xrot <= 135) {
-			ztran -= 3.0f;
+			ztran -= 5.0f;
 			cout << "D -ZTRAN" << endl;
 		}
 		if (xrot > 135 && xrot <= 225) {
-			xtran += 3.0f;
+			xtran += 5.0f;
 			cout << "D +XTRAN" << endl;
 		}
 		if (xrot > 225 && xrot <= 315) {
-			ztran += 3.0f;
+			ztran += 5.0f;
 			cout << "D +ZTRAN" << endl;
 		}
+		break;
+	case 'q':
+		ytran -= 5.0f;
+		cout << "q -YTRAN" << endl;
+		break;
+	case 'e':
+		ytran += 5.0f;
+		cout << "e +YTRAN" << endl;
 		break;
 	case '5':
 		if (in_depth)
@@ -293,7 +310,7 @@ void ukuran(int lebar, int tinggi)
 
 	glLoadIdentity();
 	gluPerspective(50.0, lebar / tinggi, 5.0, 10000.0);
-	glTranslatef(0.0f, -5.0f, -1000.0f);
+	glTranslatef(0.0f, -5.0f, -500.0f);
 	glMatrixMode(GL_MODELVIEW);
 }
 int main(int argc, char** argv)
