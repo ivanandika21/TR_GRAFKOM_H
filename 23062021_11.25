@@ -56,6 +56,24 @@ void tampil(void)
 
 	glPushMatrix();
 
+	//marka
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3i(-700, 0, 210);
+	glVertex3i(700, 0, 210);
+	glVertex3i(700, 0, 190); //belakang kiri
+	glVertex3i(-700, 0, 190); //belakang kanan
+	glEnd();
+	
+	//jalan
+	glBegin(GL_QUADS);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3i(-700, 0, 300);
+	glVertex3i(700, 0, 300);
+	glVertex3i(700, 0, 80);
+	glVertex3i(-700, 0, 80);
+	glEnd();
+	
 	//ground
 	glBegin(GL_QUADS);
 	glColor3f(0.5f, 0.5f, 0.5f);
