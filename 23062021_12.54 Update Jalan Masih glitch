@@ -1,0 +1,324 @@
+#include <GL/glut.h>
+#include <math.h>
+
+#define FPS 120
+#define TO_RADIANS 3.14/180.0
+
+const int width = 1280;
+const int height = 720;
+
+float pitch = 0.0, yaw = 0.0;
+float camX = 0.0, camZ = 0.0;
+
+void display();
+void reshape(int w, int h);
+void timer(int);
+void passive_motion(int, int);
+void camera();
+void keyboard(unsigned char key, int x, int y);
+void keyboard_up(unsigned char key, int x, int y);
+
+struct Motion
+{
+    bool Forward, Backward, Left, Right;
+};
+Motion motion = { false,false,false,false };
+
+void init()
+{
+    glutSetCursor(GLUT_CURSOR_NONE);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glutWarpPointer(width / 2, height / 2);
+}
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(width, height);
+    glutCreateWindow("TR GRAFKOM ASDOS - London");
+
+    init();
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutPassiveMotionFunc(passive_motion);
+    glutTimerFunc(0, timer, 0);
+    glutKeyboardFunc(keyboard);
+    glutKeyboardUpFunc(keyboard_up);
+
+    glutMainLoop();
+    return 0;
+}
+
+void draw()
+{
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glutWireSphere(5, 15, 15);
+    
+    glPushMatrix();
+    glTranslatef(0, 400, 0);
+    glutWireCube(800);
+    glPopMatrix();
+	
+		//marka
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3i(-700, 0, 210);
+	glVertex3i(700, 0, 210);
+	glVertex3i(700, 0, 190); //belakang kiri
+	glVertex3i(-700, 0, 190); //belakang kanan
+	glEnd();
+	
+	//jalan
+	glBegin(GL_QUADS);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3i(-700, 0, 300);
+	glVertex3i(700, 0, 300);
+	glVertex3i(700, 0, 80);
+	glVertex3i(-700, 0, 80);
+	glEnd();
+	
+	
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 1.0f);
+    glVertex3i(-170, 100, 80);
+    glVertex3i(-130, 0, 60);
+    glVertex3i(310, 40, 60);
+    glVertex3i(270, 160, 80);
+    glEnd();
+
+    // membuat object belakang
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glVertex3i(270, 180, -40);
+    glVertex3i(310, 60, -60);
+    glVertex3i(-130, 0, -70);
+    glVertex3i(-170, 120, -50);
+    glEnd();
+
+    // membuat object samping kanan
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glVertex3i(270, 160, 80);
+    glVertex3i(310, 40, 60);
+    glVertex3i(310, 60, -60);
+    glVertex3i(270, 180, -40);
+    glEnd();
+
+    // membuat object samping kiri
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 1.0f);
+    glVertex3i(-170, 120, -50);
+    glVertex3i(-130, 0, -70);
+    glVertex3i(-130, 0, 60);
+    glVertex3i(-170, 100, 80);
+    glEnd();
+
+    // membuat object diatas
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glVertex3i(-170, 120, -50);
+    glVertex3i(-170, 100, 80);
+    glVertex3i(270, 160, 80);
+    glVertex3i(270, 180, -40);
+    glEnd();
+
+    // membuat object bawah
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3i(-130, 0, -70);
+    glVertex3i(-130, 0, 60);
+    glVertex3i(310, 40, 60);
+    glVertex3i(310, 60, -60);
+    glEnd();
+
+    //DEPAN - GEDUNG KIRI
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 0.5f);
+    glVertex3i(-270, 300, 70);
+    glVertex3i(-230, 0, 50);
+    glVertex3i(150, 0, 0);
+    glEnd();
+
+    //KIRI - GEDUNG KIRI
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glVertex3i(-310, 300, -100);
+    glVertex3i(-270, 0, -120);
+    glVertex3i(-230, 0, 50);
+    glVertex3i(-270, 300, 70);
+    glEnd();
+
+    //BELAKANG - GEDUNG KIRI
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 0.5f);
+    glVertex3i(-310, 300, -100);
+    glVertex3i(-270, 0, -120);
+    glVertex3i(70, 0, -140);
+    glEnd();
+
+    //ATAS - GEDUNG KIRI
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3i(-310, 300, -100);
+    glVertex3i(-270, 300, 70);
+    glVertex3i(150, 0, 0);
+    glVertex3i(70, 0, -140);
+    glEnd();
+
+    //BAWAH - GEDUNG KIRI
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex3i(-270, 0, -120);
+    glVertex3i(-230, 0, 50);
+    glVertex3i(150, 0, 0);
+    glVertex3i(70, 0, -140);
+    glEnd();
+
+    glBegin(GL_QUADS); //ground
+    glColor3f(0.3f, 0.3f, 0.3f);
+    glVertex3f(-400.0, 0, -400.0);
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glVertex3f(400.0, 0, -400.0);
+    glColor3f(1.0f, 0.3f, 0.3f);
+    glVertex3f(400.0, 0, 400.0);
+    glColor3f(0.3f, 0.3f, 1.0f);
+    glVertex3f(-400.0, 0, 400.0);
+    glEnd();
+
+    glFlush();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    camera();
+    draw();
+
+    glutSwapBuffers();
+}
+
+void reshape(int w, int h)
+{
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluPerspective(50, 16.0 / 9.0, 2, 10000);
+    glMatrixMode(GL_MODELVIEW);
+
+}
+
+
+/*this funtion is used to keep calling the display function periodically
+  at a rate of FPS times in one second. The constant FPS is defined above and
+  has the value of 60
+*/
+void timer(int)
+{
+    glutPostRedisplay();
+    glutWarpPointer(width / 2, height / 2);
+    glutTimerFunc(1000 / FPS, timer, 0);
+}
+
+void passive_motion(int x, int y)
+{
+    /* two variables to store X and Y coordinates, as observed from the center
+      of the window
+    */
+    int dev_x, dev_y;
+    dev_x = (width / 2) - x;
+    dev_y = (height / 2) - y;
+
+    /* apply the changes to pitch and yaw*/
+    yaw += (float)dev_x / 20.0;
+    pitch += (float)dev_y / 20.0;
+}
+
+void camera()
+{
+
+    if (motion.Forward)
+    {
+        camX += cos((yaw + 90) * TO_RADIANS) / 2.0;
+        camZ -= sin((yaw + 90) * TO_RADIANS) / 2.0;
+    }
+    if (motion.Backward)
+    {
+        camX += cos((yaw + 90 + 180) * TO_RADIANS) / 2.0;
+        camZ -= sin((yaw + 90 + 180) * TO_RADIANS) / 2.0;
+    }
+    if (motion.Left)
+    {
+        camX += cos((yaw + 90 + 90) * TO_RADIANS) / 2.0;
+        camZ -= sin((yaw + 90 + 90) * TO_RADIANS) / 2.0;
+    }
+    if (motion.Right)
+    {
+        camX += cos((yaw + 90 - 90) * TO_RADIANS) / 2.0;
+        camZ -= sin((yaw + 90 - 90) * TO_RADIANS) / 2.0;
+    }
+
+    /*limit the values of pitch
+      between -60 and 70
+    */
+    if (pitch >= 70)
+        pitch = 70;
+    if (pitch <= -60)
+        pitch = -60;
+
+    glRotatef(-pitch, 1.0, 0.0, 0.0); // Along X axis
+    glRotatef(-yaw, 0.0, 1.0, 0.0);   // Along Y axis
+
+    glTranslatef(-camX, -15.0, -400-camZ);
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'W':
+    case 'w':
+        motion.Forward = true;
+        break;
+    case 'A':
+    case 'a':
+        motion.Left = true;
+        break;
+    case 'S':
+    case 's':
+        motion.Backward = true;
+        break;
+    case 'D':
+    case 'd':
+        motion.Right = true;
+        break;
+    
+    case 'q':
+        exit(1);
+    }
+}
+void keyboard_up(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'W':
+    case 'w':
+        motion.Forward = false;
+        break;
+    case 'A':
+    case 'a':
+        motion.Left = false;
+        break;
+    case 'S':
+    case 's':
+        motion.Backward = false;
+        break;
+    case 'D':
+    case 'd':
+        motion.Right = false;
+        break;
+    }
+}
