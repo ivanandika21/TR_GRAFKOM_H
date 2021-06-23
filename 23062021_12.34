@@ -253,7 +253,7 @@ void camera()
     glRotatef(-pitch, 1.0, 0.0, 0.0); // Along X axis
     glRotatef(-yaw, 0.0, 1.0, 0.0);   // Along Y axis
 
-    glTranslatef(-camX, -8.0, -camZ);
+    glTranslatef(-camX, -8.0, -400-camZ);
 }
 
 void keyboard(unsigned char key, int x, int y)
