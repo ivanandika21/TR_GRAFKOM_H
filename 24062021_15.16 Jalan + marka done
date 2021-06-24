@@ -368,7 +368,7 @@ void draw()
     glVertex3i(270, 170, -40); //G
     glVertex3i(310, 50, -60); //A
     glVertex3d(110, 25.5, -60); //G1
-    glVertex3i(-170, 110, -40); //H
+    glVertex3d(-116, 116.5, -39); //P
     glEnd();
 
     //KANAN - GEDUNG TENGAH
@@ -383,8 +383,8 @@ void draw()
     //KIRI - GEDUNG TENGAH
     glBegin(GL_QUADS);
     glColor3f(0.0f, 1.0f, 1.0f);
-    glVertex3i(-170, 110, -40); //H
-    glVertex3i(-130, 0, -60); //D
+    glVertex3d(-170, 96.4, 40.9); //T
+    glVertex3d(-130, 0, 28.3); //V
     glVertex3i(-130, 0, 70); //B
     glVertex3i(-170, 90, 90); //E
     glEnd();
@@ -392,28 +392,41 @@ void draw()
     //ATAS - GEDUNG TENGAH
     glBegin(GL_QUADS);
     glColor3f(0.0f, 0.5f, 1.0f);
-    glVertex3i(-170, 110, -40); //H
-    glVertex3i(-170, 90, 90); //E
+    glVertex3d(-116, 116.5, -39); //P
+    glVertex3d(-38.1, 115.7, 26.3); //U
     glVertex3i(270, 150, 80); //F
     glVertex3i(270, 170, -40); //G
+    glEnd();
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glVertex3d(-170, 96.4, 40.9); //T
+    glVertex3i(-170, 90, 90); //E
+    glVertex3i(270, 150, 80); //F
+    glVertex3d(-38.1, 115.7, 26.3); //U
     glEnd();
 
     //BAWAH - GEDUNG TENGAH
     glBegin(GL_POLYGON);
     glColor3f(0.0f, 1.0f, 0.5f);
-    glVertex3i(-130, 0, -60); //D
-    glVertex3i(-130, 0, 70); //B
-    glVertex3i(40, 0, 67); //W
     glVertex3i(310, 30, 60); //C
     glVertex3i(310, 50, -60); //A
+    glVertex3d(272.1, 45.7, -60); //F1
+    glVertex3d(269.95, 25.05, 63); //E1
     glEnd();
 
     //DEPAN - GEDUNG KIRI
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_QUADS);
     glColor3f(1.0f, 0.0f, 0.5f);
     glVertex3i(-270, 200, 60); //L
     glVertex3i(-230, 0, 40); //I
-    glVertex3i(280, 0, -20); //N
+    glVertex3d(-130, 0, 28.3); //V
+    glVertex3d(-170, 96.4, 40.9); //T
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 0.0f, 0.5f);
+    glVertex3i(-270, 200, 60); //L
+    glVertex3d(-170, 96.4, 40.9); //T
+    glVertex3d(-38.1, 115.7, 26.3); //U
     glEnd();
 
     //KIRI - GEDUNG KIRI
@@ -436,11 +449,26 @@ void draw()
     //ATAS - GEDUNG KIRI
     glBegin(GL_QUADS);
     glColor3f(0.0f, 1.0f, 0.5f);
-    glVertex3i(-310, 190, -70); //K
+    glVertex3d(-295, 193.7, -21.7); //O
     glVertex3i(-270, 200, 60); //L
-    glVertex3i(280, 0, -20); //N
+    glVertex3d(-38.1, 115.7, 26.3); //U
+    glVertex3d(-116, 116.5, -39); //P
+    glEnd();
+    glBegin(GL_POLYGON);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3i(-310, 190, -70); //K
+    glVertex3d(-295, 193.7, -21.7); //O
+    glVertex3d(-116, 116.5, -39); //P
+    glVertex3d(110, 25.5, -60); //G1
     glVertex3i(70, 0, -120); //M
     glEnd();
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3d(110, 25.5, -60); //G1
+    glVertex3d(188, 0, -64.7); //Q
+    glVertex3i(70, 0, -120); //M
+    glEnd();
+
 
     //DEPAN - GEDUNG DEPAN
     glBegin(GL_QUADS);
@@ -471,7 +499,7 @@ void draw()
 
     //ATAP - GEDUNG DEPAN
     glBegin(GL_TRIANGLES);
-    glColor3f(1.0f, 0.0f, 1.0f);
+    glColor3f(0.0f, 0.0f, 0.0f);
     glVertex3d(59.5, 100, 82); //Z
     glVertex3i(280, 80, 90); //A4
     glVertex3d(278.8, 79, 68.95); //D1
