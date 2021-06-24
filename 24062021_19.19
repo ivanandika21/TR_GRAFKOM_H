@@ -1,0 +1,432 @@
+#include <GL/glut.h>
+#include <math.h>
+
+#define FPS 120
+#define TO_RADIANS 3.14/180.0
+
+const int width = 1280;
+const int height = 720;
+
+float pitch = 0.0, yaw = 0.0;
+float camX = 0.0, camZ = 0.0, terbang = 0.0;
+
+void display();
+void reshape(int w, int h);
+void timer(int);
+void passive_motion(int, int);
+void camera();
+void keyboard(unsigned char key, int x, int y);
+void keyboard_up(unsigned char key, int x, int y);
+
+struct Motion
+{
+    bool Forward, Backward, Left, Right;
+};
+Motion motion = { false,false,false,false };
+
+void init()
+{
+    glutSetCursor(GLUT_CURSOR_NONE);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glutWarpPointer(width / 2, height / 2);
+}
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(width, height);
+    glutCreateWindow("TR GRAFKOM ASDOS - London");
+
+    init();
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutPassiveMotionFunc(passive_motion);
+    glutTimerFunc(0, timer, 0);
+    glutKeyboardFunc(keyboard);
+    glutKeyboardUpFunc(keyboard_up);
+
+    glutMainLoop();
+    return 0;
+}
+
+void draw()
+{
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glutWireSphere(5, 15, 15);
+
+    glPushMatrix();
+    glTranslatef(0, 400, 0);
+    glutWireCube(800);
+    glPopMatrix();
+
+    glBegin(GL_QUADS); //ground
+    glColor3f(0.3f, 0.3f, 0.3f);
+    glVertex3f(-400.0, 0, -400.0);
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glVertex3f(400.0, 0, -400.0);
+    glColor3f(1.0f, 0.3f, 0.3f);
+    glVertex3f(400.0, 0, 150.0);
+    glColor3f(0.3f, 0.3f, 1.0f);
+    glVertex3f(-400.0, 0, 150.0);
+    glEnd();
+
+    //marka
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex3i(-400, 0, 255);
+    glVertex3i(400, 0, 255);
+    glVertex3i(400, 0, 250); //belakang kiri
+    glVertex3i(-400, 0, 250); //belakang kanan
+    glEnd();
+
+    //jalan
+    glBegin(GL_QUADS);
+    glColor3f(0.2f, 0.2f, 0.2f);
+    glVertex3i(-400, 0, 250);
+    glVertex3i(400, 0, 250);
+    glVertex3i(400, 0, 150);
+    glVertex3i(-400, 0, 150);
+    glEnd();
+
+    //jalan kanan
+    glBegin(GL_QUADS);
+    glColor3f(0.2f, 0.2f, 0.2f);
+    glVertex3i(-400, 0, 355);
+    glVertex3i(400, 0, 355);
+    glVertex3i(400, 0, 255);
+    glVertex3i(-400, 0, 255);
+    glEnd();
+
+    //rumput
+    glBegin(GL_QUADS);
+    glColor3f(0.184, 0.886, 0.113);
+    glVertex3i(-400, 0, 355);
+    glVertex3i(400, 0, 355);
+    glVertex3i(400, 0, 400);
+    glVertex3i(-400, 0, 400);
+    glEnd();
+
+    //DEPAN - GEDUNG TENGAH
+    glBegin(GL_POLYGON);
+    glColor3f(1.0f, 0.0f, 1.0f);
+    glVertex3i(-170, 90, 90); //E
+    glVertex3i(-130, 0, 70); //B
+    glVertex3i(40, 0, 67); //W
+    glVertex3i(310, 30, 60); //C
+    glVertex3i(270, 150, 80); //F
+    glEnd();
+
+    //BELAKANG - GEDUNG TENGAH
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glVertex3i(270, 170, -40); //G
+    glVertex3i(310, 50, -60); //A
+    glVertex3d(110, 25.5, -60); //G1
+    glVertex3d(-116, 116.5, -39); //P
+    glEnd();
+
+    //KANAN - GEDUNG TENGAH
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glVertex3i(270, 150, 80); //F
+    glVertex3i(310, 30, 60); //C
+    glVertex3i(310, 50, -60); //A
+    glVertex3i(270, 170, -40); //G
+    glEnd();
+
+    //KIRI - GEDUNG TENGAH
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glVertex3d(-170, 96.4, 40.9); //T
+    glVertex3d(-130, 0, 28.3); //V
+    glVertex3i(-130, 0, 70); //B
+    glVertex3i(-170, 90, 90); //E
+    glEnd();
+
+    //ATAS - GEDUNG TENGAH
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glVertex3d(-116, 116.5, -39); //P
+    glVertex3d(-38.1, 115.7, 26.3); //U
+    glVertex3i(270, 150, 80); //F
+    glVertex3i(270, 170, -40); //G
+    glEnd();
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glVertex3d(-170, 96.4, 40.9); //T
+    glVertex3i(-170, 90, 90); //E
+    glVertex3i(270, 150, 80); //F
+    glVertex3d(-38.1, 115.7, 26.3); //U
+    glEnd();
+
+    //BAWAH - GEDUNG TENGAH
+    glBegin(GL_POLYGON);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3i(310, 30, 60); //C
+    glVertex3i(310, 50, -60); //A
+    glVertex3d(290, 47.7, -60); //F1
+    glVertex3d(286.3, 27.3, 61.4); //E1
+    glEnd();
+
+    //DEPAN - GEDUNG KIRI
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 0.5f);
+    glVertex3i(-270, 200, 60); //L
+    glVertex3i(-230, 0, 40); //I
+    glVertex3d(-130, 0, 28.3); //V
+    glVertex3d(-170, 96.4, 40.9); //T
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 0.0f, 0.5f);
+    glVertex3i(-270, 200, 60); //L
+    glVertex3d(-170, 96.4, 40.9); //T
+    glVertex3d(-38.1, 115.7, 26.3); //U
+    glEnd();
+
+    //KIRI - GEDUNG KIRI
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glVertex3i(-310, 190, -70); //K
+    glVertex3i(-270, 0, -90); //J
+    glVertex3i(-230, 0, 40); //I
+    glVertex3i(-270, 200, 60); //L
+    glEnd();
+
+    //BELAKANG - GEDUNG KIRI
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 0.5f);
+    glVertex3i(-310, 190, -70); //K
+    glVertex3i(-270, 0, -90); //J
+    glVertex3i(70, 0, -120); //M
+    glEnd();
+
+    //ATAS - GEDUNG KIRI
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3d(-295, 193.7, -21.7); //O
+    glVertex3i(-270, 200, 60); //L
+    glVertex3d(-38.1, 115.7, 26.3); //U
+    glVertex3d(-116, 116.5, -39); //P
+    glEnd();
+    glBegin(GL_POLYGON);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3i(-310, 190, -70); //K
+    glVertex3d(-295, 193.7, -21.7); //O
+    glVertex3d(-116, 116.5, -39); //P
+    glVertex3d(110, 25.5, -60); //G1
+    glVertex3i(70, 0, -120); //M
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 1.0f, 0.5f);
+    glVertex3d(110, 25.5, -60); //G1
+    glVertex3d(188, 0, -64.7); //Q
+    glVertex3i(70, 0, -120); //M
+    glEnd();
+
+    //DEPAN - GEDUNG DEPAN
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glVertex3d(89.1, 96.8, 79.9); //Z
+    glVertex3i(40, 0, 67); //W
+    glVertex3i(285, 0, 90); //A3
+    glVertex3i(290, 80, 100); //A4
+    glEnd();
+
+    //KANAN 1 - GEDUNG DEPAN
+    glBegin(GL_POLYGON);
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3i(290, 80, 100); //A4
+    glVertex3i(285, 0, 90); //A3
+    glVertex3d(285, 0, 57.3); //H1
+    glVertex3d(288.8, 79, 68.95); //D1
+    glEnd();
+
+    //KANAN 2 - GEDUNG DEPAN
+    glBegin(GL_POLYGON);
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3d(286.3, 27.3, 61.4); //E1
+    glVertex3i(285, 0, 60.); //H1
+    glVertex3i(285, 0, -60); //A1
+    glVertex3d(290, 47.7, -60); //F1
+    glEnd();
+
+    //ATAP - GEDUNG DEPAN
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex3d(89.1, 96.8, 79.9); //Z
+    glVertex3i(290, 80, 100); //A4
+    glVertex3d(288.8, 79, 68.95); //D1
+    glEnd();
+
+    //BELAKANG - GEDUNG DEPAN
+    glBegin(GL_POLYGON);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glVertex3d(290, 47.7, -60); //F1
+    glVertex3i(285, 0, -60); //A1
+    glVertex3d(188, 0, -64.7); //Q
+    glVertex3d(110, 25.5, -60); //G1
+    glEnd();
+
+    //KACA - GEDUNG DEPAN
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glVertex3d(91.3, 40.7, 75.8); //K1
+    glVertex3d(102.8, 0, 73.7); //L1
+    glVertex3d(215.3, 0, 84); //N1
+    glVertex3d(208.3, 26.4, 87.5); //M1
+    glEnd();
+
+    //BAWAH - GEDUNG KIRI
+    //glBegin(GL_QUADS);
+    //glColor3f(1.0f, 1.0f, 1.0f);
+    //glVertex3i(-270, 0, -90); //J
+    //glVertex3i(-230, 0, 40); //I
+    //glVertex3i(150, 0, 0); //N
+    //glVertex3i(70, 0, -120); //M
+    //glEnd();
+
+    glFlush();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    camera();
+    draw();
+
+    glutSwapBuffers();
+}
+
+void reshape(int w, int h)
+{
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluPerspective(50, 16.0 / 9.0, 2, 10000);
+    glMatrixMode(GL_MODELVIEW);
+
+}
+
+
+/*this funtion is used to keep calling the display function periodically
+  at a rate of FPS times in one second. The constant FPS is defined above and
+  has the value of 60
+*/
+void timer(int)
+{
+    glutPostRedisplay();
+    glutWarpPointer(width / 2, height / 2);
+    glutTimerFunc(1000 / FPS, timer, 0);
+}
+
+void passive_motion(int x, int y)
+{
+    /* two variables to store X and Y coordinates, as observed from the center
+      of the window
+    */
+    int dev_x, dev_y;
+    dev_x = (width / 2) - x;
+    dev_y = (height / 2) - y;
+
+    /* apply the changes to pitch and yaw*/
+    yaw += (float)dev_x / 20.0;
+    pitch += (float)dev_y / 20.0;
+}
+
+void camera()
+{
+
+    if (motion.Forward)
+    {
+        camX += cos((yaw + 90) * TO_RADIANS) * 3;
+        camZ -= sin((yaw + 90) * TO_RADIANS) * 3;
+    }
+    if (motion.Backward)
+    {
+        camX += cos((yaw + 90 + 180) * TO_RADIANS) * 3;
+        camZ -= sin((yaw + 90 + 180) * TO_RADIANS) * 3;
+    }
+    if (motion.Left)
+    {
+        camX += cos((yaw + 90 + 90) * TO_RADIANS) * 3;
+        camZ -= sin((yaw + 90 + 90) * TO_RADIANS) * 3;
+    }
+    if (motion.Right)
+    {
+        camX += cos((yaw + 90 - 90) * TO_RADIANS) * 3;
+        camZ -= sin((yaw + 90 - 90) * TO_RADIANS) * 3;
+    }
+
+    /*limit the values of pitch
+      between -60 and 70
+    */
+
+    if (pitch >= 70)
+        pitch = 70;
+    if (pitch <= -90)
+        pitch = -90;
+
+    glRotatef(-pitch, 1.0, 0.0, 0.0); // Along X axis
+    glRotatef(-yaw, 0.0, 1.0, 0.0);   // Along Y axis
+
+    glTranslatef(-camX, -15.0 - terbang, -400 - camZ);
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'W':
+    case 'w':
+        motion.Forward = true;
+        break;
+    case 'A':
+    case 'a':
+        motion.Left = true;
+        break;
+    case 'S':
+    case 's':
+        motion.Backward = true;
+        break;
+    case 'D':
+    case 'd':
+        motion.Right = true;
+        break;
+    case 'E':
+    case 'e':
+        terbang += 10.0;
+        break;
+    case 'Q':
+    case 'q':
+        terbang -= 10.0;
+        break;
+    case '`':
+        exit(1);
+    }
+}
+void keyboard_up(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'W':
+    case 'w':
+        motion.Forward = false;
+        break;
+    case 'A':
+    case 'a':
+        motion.Left = false;
+        break;
+    case 'S':
+    case 's':
+        motion.Backward = false;
+        break;
+    case 'D':
+    case 'd':
+        motion.Right = false;
+        break;
+    }
+}
