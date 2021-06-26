@@ -1,0 +1,213 @@
+	//code pohon3d--------------------------------------------------------------------------------
+	//pohon 1
+	//batang tutup atas
+	glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-180, 90, 130);
+    glVertex3i(-170, 90, 130);
+    glVertex3i(-170, 90, 140);
+    glVertex3i(-180, 90, 140);
+    glEnd();
+    //batang tutup bawah
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-180, 2, 130);
+    glVertex3i(-170, 2, 130);
+    glVertex3i(-170, 2, 140);
+    glVertex3i(-180, 2, 140);
+    glEnd();
+    //batang belakang
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-180, 0, 130);
+    glVertex3i(-170, 0, 130);
+    glVertex3i(-170, 90, 130);
+    glVertex3i(-180, 90, 130);
+    glEnd();
+    //batang depan
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-180, 0, 140);
+    glVertex3i(-170, 0, 140);
+    glVertex3i(-170, 90, 140);
+    glVertex3i(-180, 90, 140);
+    glEnd();
+    //batang kiri
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-180, 0, 130);
+    glVertex3i(-180, 0, 140);
+    glVertex3i(-180, 90, 140);
+    glVertex3i(-180, 90, 130);
+    glEnd();
+	//batang kanan
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-170, 0, 130);
+    glVertex3i(-170, 0, 140);
+    glVertex3i(-170, 90, 140);
+    glVertex3i(-170, 90, 130);
+    glEnd();
+    
+	//pohon 2-------------------------------------------------------------------------------------
+	//batang tutup atas
+	glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-130, 90, 130);
+    glVertex3i(-120, 90, 130);
+    glVertex3i(-120, 90, 140);
+    glVertex3i(-130, 90, 140);
+    glEnd();
+    //batang tutup bawah
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-130, 2, 130);
+    glVertex3i(-120, 2, 130);
+    glVertex3i(-120, 2, 140);
+    glVertex3i(-130, 2, 140);
+    glEnd();
+    //batang belakang
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-130, 0, 130);
+    glVertex3i(-120, 0, 130);
+    glVertex3i(-120, 90, 130);
+    glVertex3i(-130, 90, 130);
+    glEnd();
+    //batang depan
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-130, 0, 140);
+    glVertex3i(-120, 0, 140);
+    glVertex3i(-120, 90, 140);
+    glVertex3i(-130, 90, 140);
+    glEnd();
+    //batang kiri
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-130, 0, 130);
+    glVertex3i(-130, 0, 140);
+    glVertex3i(-130, 90, 140);
+    glVertex3i(-130, 90, 130);
+    glEnd();
+	//batang kanan
+    glBegin(GL_QUADS);
+    glColor3f(0.39,0.14,0);
+    glVertex3i(-120, 0, 130);
+    glVertex3i(-120, 0, 140);
+    glVertex3i(-120, 90, 140);
+    glVertex3i(-120, 90, 130);
+    glEnd();
+    
+    //daun pohon1----------------------------------------------------------------------
+    //daun tutup atas
+	glBegin(GL_QUADS);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-200, 150, 100); //belakang kiri
+    glVertex3i(-150, 150, 100); //belakang kanan
+    glVertex3i(-150, 150, 170); //depan kanan
+    glVertex3i(-200, 150, 170); //depan kiri
+    glEnd();
+    //daun tutup bawah
+    glBegin(GL_QUADS);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-200, 90, 100); //belakang kiri
+    glVertex3i(-150, 90, 100); //belakang kanan
+    glVertex3i(-150, 90, 170); //depan kanan
+    glVertex3i(-200, 90, 170); //depan kiri
+    glEnd();
+    //daun belakang
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-200, 90, 100);
+    glVertex3i(-150, 90, 100);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-150, 150, 100);
+    glVertex3i(-200, 150, 100);
+    glEnd();
+    //daun depan
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-200, 90, 170);
+    glVertex3i(-150, 90, 170);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-150, 150, 170);
+    glVertex3i(-200, 150, 170);
+    glEnd();
+	//daun kiri
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-200, 90, 100);
+    glVertex3i(-200, 90, 170);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-200, 150, 170);
+    glVertex3i(-200, 150, 100);
+    glEnd();
+    //daun kanan
+    glBegin(GL_QUADS);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-150, 90, 100);
+    glVertex3i(-150, 90, 170);
+    glVertex3i(-150, 150, 170);
+    glVertex3i(-150, 150, 100);
+    glEnd();
+    
+    //daun pohon2----------------------------------------------------------------------
+    //daun tutup atas
+    glBegin(GL_QUADS);
+    glColor3f(0.11,0.35,0.09);
+    glVertex3i(-145, 150, 100); //belakang kiri
+    glVertex3i(-95, 150, 100); //belakang kanan
+    glVertex3i(-95, 150, 170); //depan kanan
+    glVertex3i(-145, 150, 170); //depan kiri
+    glEnd();
+    
+    //daun tutup bawah
+    glBegin(GL_QUADS);
+    glColor3f(0.11,0.35,0.09);
+    glVertex3i(-145, 90, 100); //belakang kiri
+    glVertex3i(-95, 90, 100); //belakang kanan
+    glVertex3i(-95, 90, 170); //depan kanan
+    glVertex3i(-145, 90, 170); //depan kiri
+    glEnd();
+    
+    //daun belakang
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-145, 90, 100);
+    glVertex3i(-95, 90, 100);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-95, 150, 100);
+    glVertex3i(-145, 150, 100);
+    glEnd();
+    
+    //daun depan
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-145, 90, 170);
+    glVertex3i(-95, 90, 170);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-95, 150, 170);
+    glVertex3i(-145, 150, 170);
+    glEnd();
+    
+    //daun kiri
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-145, 90, 100);
+    glVertex3i(-145, 90, 170);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-145, 150, 170);
+    glVertex3i(-145, 150, 100);
+    glEnd();
+    
+    //daun kanan
+    glBegin(GL_QUADS);
+    glColor3f(0.15,0.93,0.09);
+    glVertex3i(-95, 90, 100);
+    glVertex3i(-95, 90, 170);
+    glColor3f(0.02,0.38,0);
+    glVertex3i(-95, 150, 170);
+    glVertex3i(-95, 150, 100);
+    glEnd();
+    //END OF POHON--------------------------------------------------------------------------
